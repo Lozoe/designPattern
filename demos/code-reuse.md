@@ -2,7 +2,7 @@
 #### 代码复用模式
 ---
 
-###### 模式1：原型继承
+###### 原型继承
 原型继承是让父对象作为子对象的原型
 
 ```
@@ -304,3 +304,5 @@ var twosay3 = one.say.bind(two, 'Enchanté');
 console.log(twosay3()); // "Enchanté, another object"
 
 ```
+
+避免的情况：http://www.cnblogs.com/TomXu/archive/2012/04/23/2438005.html
