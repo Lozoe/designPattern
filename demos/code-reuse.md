@@ -1,8 +1,14 @@
-# designPattern
-#### 代码复用模式
----
+# 代码复用模式
 
-###### 原型继承
+## Overview
+
+* [原型继承](#原型继承)
+* [复制所有属性进行继承](#复制所有属性进行继承)
+* [混合mix-in](#混合mix-in)
+* [借用方法](#借用方法)
+
+## 原型继承
+
 原型继承是让父对象作为子对象的原型
 
 ```
@@ -101,7 +107,7 @@ driver.topSpeed // 100mph
 ```
 ==但是有个地方需要注意，就是Object.create(null)创建的对象的原型为undefined，也就是没有toString和valueOf方法，所以alert(man);的时候会出错，但alert(man.car);是没问题的。==
 
-###### 模式2：复制所有属性进行继承
+## 复制所有属性进行继承
 这种方式的继承就是将父对象里所有的属性都复制到子对象上，一般子对象可以使用父对象的数据。
 
 先来看一个浅拷贝的例子：
@@ -168,7 +174,7 @@ console.log(dad.counts.toString()); // "1,2,3"
 console.log(dad.reads === kid.reads); // false
 kid.reads.paper = false;
 ```
-###### 混合mix-in
+## 混合mix-in
 混入就是将一个对象的一个或多个（或全部）属性（或方法）复制到另外一个对象，看🌰
 
 ```
@@ -244,7 +250,7 @@ vehicle.driveForward();
 vehicle.driveBackward();
 ```
 
-###### 借用方法
+## 借用方法
 ```
 var one = {
     name: 'object',
@@ -304,5 +310,3 @@ var twosay3 = one.say.bind(two, 'Enchanté');
 console.log(twosay3()); // "Enchanté, another object"
 
 ```
-
-避免的情况：http://www.cnblogs.com/TomXu/archive/2012/04/23/2438005.html
