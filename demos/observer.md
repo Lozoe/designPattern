@@ -9,7 +9,7 @@
 * [版本三](#版本三)
 * [总结](#总结)
 
-## 什么是中介者模式？
+## 什么是观察者模式？
 
 观察者模式又叫发布订阅模式（Publish/Subscribe），它定义了一种一对多的关系，让多个观察者对象同时监听某一个主题对象，这个主题对象的状态发生变化时就会通知所有的观察者对象，使得它们能够自动更新自己。
 
@@ -32,6 +32,7 @@ var pubsub = {};
     // 发布方法
     q.publish = function (topic, args) {
 
+        // 观察者列表不存在需要被发布执行的函数直接返回false
         if (!topics[topic]) {
             return false;
         }
@@ -48,7 +49,7 @@ var pubsub = {};
         return true;
 
     };
-    //订阅方法
+    // 订阅方法
     q.subscribe = function (topic, func) {
 
         if (!topics[topic]) {
@@ -117,7 +118,7 @@ pubsub.publish('example1', 'hello again! (this will fail)');
 利用原型的特性实现一个观察者模式，代码如下：
 ```
 /**
- * forEach,filter兼容
+ * forEach, filter兼容
  */
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function (fn, thisObj) {
@@ -148,21 +149,17 @@ Observer.prototype = {
         this.fns.push(fn);
     },
     unsubscribe: function (fn) {
-        this.fns = this.fns.filter(
-                        function (el) {
-                            if (el !== fn) {
-                                return el;
-                            }
-                        }
-                    );
+        this.fns = this.fns.filter(function (el) {
+            if (el !== fn) {
+                return el;
+            }
+        });
     },
     update: function (o, thisObj) {
         var scope = thisObj || window;
-        this.fns.forEach(
-                        function (el) {
-                            el.call(scope, o);
-                        }
-                    );
+        this.fns.forEach(function (el) {
+            el.call(scope, o);
+        });
     }
 };
 
@@ -191,13 +188,13 @@ o.update("Tom回来了！");
 ## 版本三
 如果想让多个对象都具有观察者发布订阅的功能，我们可以定义一个通用的函数，然后将该函数的功能应用到需要观察者功能的对象上，代码如下：
 ```
-//通用代码
+// 通用代码
 var observer = {
-    //订阅
+    // 订阅
     addSubscriber: function (callback) {
         this.subscribers[this.subscribers.length] = callback;
     },
-    //退订
+    // 退订
     removeSubscriber: function (callback) {
         for (var i = 0; i < this.subscribers.length; i++) {
             if (this.subscribers[i] === callback) {
@@ -205,7 +202,7 @@ var observer = {
             }
         }
     },
-    //发布
+    // 发布
     publish: function (what) {
         for (var i = 0; i < this.subscribers.length; i++) {
             if (typeof this.subscribers[i] === 'function') {
@@ -257,15 +254,15 @@ var mm = {
 // 订阅
 blogger.addSubscriber(tom.read);
 blogger.addSubscriber(mm.show);
-blogger.recommend(123); //调用发布
+blogger.recommend(123); // 调用发布
 
-//退订
+// 退订
 blogger.removeSubscriber(mm.show);
-blogger.recommend(456); //调用发布
+blogger.recommend(456); // 调用发布
 
-//另外一个对象的订阅
+// 另外一个对象的订阅
 user.addSubscriber(mm.show);
-user.vote(789); //调用发布
+user.vote(789); // 调用发布
 ```
 
 ## 版本四（jQuery）
@@ -314,14 +311,3 @@ $.unsubscribe("/some/topic");
 ## 总结
 当一个对象的改变需要同时改变其它对象，并且它不知道具体有多少对象需要改变的时候，就应该考虑使用观察者模式。
 观察者模式实际的工作就是在解耦，让耦合的双方都依赖于抽象，而不是依赖于具体。从而使得各自的变化都不会影响到另一边的变化。
-
-
-
-
-
-
-
-
-
-
-
