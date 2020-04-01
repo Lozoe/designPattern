@@ -201,7 +201,7 @@ let createProxyFactory = function(fn) {
     return function() {
         let cacheKey = Array.prototype.join.call(arguments, '_');
         if(cacheKey in cache) {
-            return cache[args];
+            return cache[cacheKey];
         }
         return cache[cacheKey] = fn.apply(this, arguments);
     };
